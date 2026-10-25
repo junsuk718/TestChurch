@@ -196,6 +196,13 @@
       const choices = [...document.querySelectorAll('[data-choice]')];
       let current = 0;
       let branch = '';
+      function reset() {
+        branch = '';
+        document.querySelectorAll('[aria-pressed]').forEach((button) => button.setAttribute('aria-pressed', 'false'));
+        document.getElementById('choiceStatus').textContent = '하나를 고르고 ‘다음’을 눌러 주세요.';
+        document.getElementById('reasonStatus').textContent = '가장 가까운 이유를 선택해 보세요.';
+        document.getElementById('reflection').textContent = '가장 가까운 생각을 선택해 보세요.';
+      }
       function render() {
         pages.forEach((page, index) => { const active = index === current; page.classList.toggle('is-active', active); page.setAttribute('aria-hidden', String(!active)); });
         document.querySelectorAll('[data-branch]').forEach((panel) => panel.classList.toggle('is-active', panel.dataset.branch === branch));
@@ -208,7 +215,8 @@
       }
       function move(step) {
         if (step > 0 && current === 1 && !branch) return;
-        current = current === pages.length - 1 && step > 0 ? 0 : Math.max(0, Math.min(pages.length - 1, current + step));
+        if (current === pages.length - 1 && step > 0) { reset(); current = 0; }
+        else current = Math.max(0, Math.min(pages.length - 1, current + step));
         render();
       }
       choices.forEach((button) => button.addEventListener('click', () => {
