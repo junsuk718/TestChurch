@@ -164,7 +164,7 @@
     <section class="page" id="page-3" data-page="2" tabindex="-1" aria-label="선택에 맞춘 내용" aria-hidden="true">
       <aside class="folio"><strong>당신의 이야기</strong><span>선택에 맞춘 내용입니다</span><b>03</b></aside>
       <div class="page-body center">
-        <article data-branch="yes"><div class="rule"></div><h2 id="title-3">요즘은 왜 교회에 다니고 있지 않을까요?</h2><p class="intro">어떤 이유든 괜찮아요. 먼저 이야기를 듣고 싶어요.</p><div class="line-list"><div class="line-item"><b>1</b><span>상처받아서</span></div><div class="line-item"><b>2</b><span>하나님이 믿어지지 않아서</span></div><div class="line-item"><b>3</b><span>노는 게 더 좋아서</span></div><div class="line-item"><b>4</b><span>바빠서</span></div></div></article>
+        <article data-branch="yes"><div class="rule"></div><h2 id="title-3">요즘은 왜 교회에 다니고 있지 않을까요?</h2><p class="intro">어떤 이유든 괜찮아요. 먼저 이야기를 듣고 싶어요.</p><div class="perception-list" role="group" aria-label="교회에 다니고 있지 않은 이유"><button class="perception reason" type="button" aria-pressed="false"><span>1</span><span>상처받아서</span></button><button class="perception reason" type="button" aria-pressed="false"><span>2</span><span>하나님이 믿어지지 않아서</span></button><button class="perception reason" type="button" aria-pressed="false"><span>3</span><span>노는 게 더 좋아서</span></button><button class="perception reason" type="button" aria-pressed="false"><span>4</span><span>바빠서</span></button></div><p class="reflection" id="reasonStatus" aria-live="polite">가장 가까운 이유를 선택해 보세요.</p></article>
         <article data-branch="no"><div class="rule"></div><h2>교회 이야기를 해줘도 될까요?</h2><p class="intro">사랑, 죄, 십자가, 선택에 관한 이야기예요.</p><div class="story-grid"><div class="story-step"><h3>사랑</h3><p>하나님은 당신을 사랑하시고 당신에 대한 계획을 가지고 계신 분</p></div><div class="story-step"><h3>죄</h3><p>하지만 사람은 하나님을 떠남. 죄로 인해 하나님을 만날 수 없음</p></div><div class="story-step"><h3>십자가</h3><p>하나님의 본체이신 예수님이 이 땅에 직접 오셔서 죄의 문제를 해결해 주심</p></div><div class="story-step"><h3>선택</h3><p>우리는 나를 위해 이 땅에 오신 예수님을 믿고 그를 통해 구원을 얻을 수 있음</p></div></div></article>
       </div>
     </section>
@@ -223,7 +223,9 @@
       let touchStart = 0;
       document.getElementById('deck').addEventListener('touchstart', (event) => { touchStart = event.changedTouches[0].clientX; }, { passive: true });
       document.getElementById('deck').addEventListener('touchend', (event) => { const distance = event.changedTouches[0].clientX - touchStart; if (Math.abs(distance) > 70) move(distance < 0 ? 1 : -1); }, { passive: true });
-      const perceptions = [...document.querySelectorAll('.perception')];
+      const reasons = [...document.querySelectorAll('.reason')];
+      reasons.forEach((button) => button.addEventListener('click', () => { reasons.forEach((option) => option.setAttribute('aria-pressed', String(option === button))); document.getElementById('reasonStatus').textContent = `${button.lastElementChild.textContent}에 가까운 마음이군요.`; }));
+      const perceptions = [...document.querySelectorAll('.perception:not(.reason)')];
       perceptions.forEach((button) => button.addEventListener('click', () => { perceptions.forEach((option) => option.setAttribute('aria-pressed', String(option === button))); document.getElementById('reflection').textContent = button.dataset.reflection; }));
       const toast = document.getElementById('toast');
       let toastTimer;
